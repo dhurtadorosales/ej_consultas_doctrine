@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Listado de alumnado</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Alumno</th>
+                <th>Partes</th>
+            </tr>
+        </thead>
+        <tbody>
+            {%  for alumno in alumnado %}
+                <tr>
+                    <td>{{ alumno.apellidos }}, {{ alumno.nombre }}</td>
+                    <td>{{ alumno.partes.descripcion }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+
+    </table>
+{% endblock %}
+

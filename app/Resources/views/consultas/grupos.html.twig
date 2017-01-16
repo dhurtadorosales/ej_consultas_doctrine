@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Listado de grupos</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Grupo</th>
+                <th>Tutor</th>
+                <th>Aula</th>
+                <th>Planta</th>
+            </tr>
+        </thead>
+        <tbody>
+            {%  for grupo in grupos %}
+                <tr>
+                    <td>{{ grupo.descripcion }}</td>
+                    <td>{{ grupo.tutor.nombre }} {{ grupo.tutor.apellidos }}</td>
+                    <td>{{ grupo.aula }}</td>
+                    <td>{{ grupo.planta }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+
+    </table>
+{% endblock %}
+

@@ -2,25 +2,25 @@
 
 {% block body %}
     <h1>Listado de alumnado</h1>
-
+    <h2>Encontrados {{ alumnado|length }} alumno{% if alumnado|length != 1 %}s{% endif %}</h2>
     <table>
         <thead>
-            <tr>
-                <th>Alumno</th>
-                <th>Grupo</th>
-                <th>Fecha Nacimiento</th>
-                <th>Descripcion</th>
-            </tr>
+        <tr>
+            <th>Alumno</th>
+            <th>Grupo</th>
+            <th>Fecha Nacimiento</th>
+            <th>Descripcion</th>
+        </tr>
         </thead>
         <tbody>
-            {%  for alumno in alumnado %}
-                <tr>
-                    <td>{{ alumno.apellidos }}, {{ alumno.nombre }}</td>
-                    <td>{{ alumno.grupo.descripcion }}</td>
-                    <td>{{ alumno.fechaNacimiento | date('d/m/Y') }}</td>
-                    <td>{{ alumno.grupo.descripcion }}</td>
-                </tr>
-            {% endfor %}
+        {%  for alumno in alumnado %}
+            <tr>
+                <td>{{ alumno.apellidos }}, {{ alumno.nombre }}</td>
+                <td>{{ alumno.grupo.descripcion }}</td>
+                <td>{{ alumno.fechaNacimiento | date('d/m/Y') }}</td>
+                <td>{{ alumno.grupo.descripcion }}</td>
+            </tr>
+        {% endfor %}
         </tbody>
 
     </table>
