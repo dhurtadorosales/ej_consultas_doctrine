@@ -8,13 +8,15 @@
         <tr>
             <th>Grupo</th>
             <th>Número de alumnos</th>
+            <th>Tutor</th>
         </tr>
         </thead>
         <tbody>
         {%  for grupo in grupos %}
             <tr>
-                <td>{{ grupo.descripcion }}</td>
-                <td>{{ numero }}</td>
+                <td>{{ grupo[0].descripcion }}</td>
+                <td>{{ grupo[1] }}</td>
+                <td>{{ grupo[0].tutor.nombre }}</td>
             </tr>
         {% endfor %}
         </tbody>

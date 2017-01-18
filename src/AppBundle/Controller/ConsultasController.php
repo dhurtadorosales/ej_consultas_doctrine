@@ -174,12 +174,12 @@ class ConsultasController extends Controller
     }
 
     /**
-     * @Route("/ej7/{anio}", name="ejercicio7")
+     * @Route("/ej7/{parametro}", name="ejercicio7", requirements={"parametro"="\d{4}"})
      */
-    public function ej7Action($anio)
+    public function ej7Action($parametro)
     {
-        $fechaInicio= ($anio-1)."-12-31";
-        $fechaFin= ($anio+1)."-01-01";
+        //$fechaInicio = ($parametro-1)."-12-31";
+        //$fechaFin = ($parametro+1)."-01-01";
 
         //Entity manager
         /** @var EntityManager $em */
@@ -190,8 +190,8 @@ class ConsultasController extends Controller
             ->from('AppBundle:Alumno', 'a')
             ->where('a.fechaNacimiento > :fechaInicio')
             ->andWhere('a.fechaNacimiento < :fechaFin')
-            ->setParameter('fechaInicio', new \DateTime($fechaInicio))
-            ->setParameter('fechaFin', new \DateTime($fechaFin))
+            ->setParameter('fechaInicio', new \DateTime(($parametro - 1) . "-12-31"))
+            ->setParameter('fechaFin', new \DateTime(($parametro + 1) . "-01-01"))
             ->orderBy('a.fechaNacimiento', 'DESC')
             ->getQuery()
             ->getResult();
@@ -200,7 +200,17 @@ class ConsultasController extends Controller
             'alumnado' => $alumnado
         ]);
     }
-
+/*
+    /**
+     * @Route("/ej7/{parametro}", name="errorExpresion")
+     */
+/*    public function errorExpresionAction($parametro)
+    {
+        return $this->render('consultas/error_expresion.html.twig', [
+            'mensaje' => "El parametro pasado no es un año"
+        ]);
+    }
+*/
     /**
      * @Route("/ej8", name="ejercicio8")
      */
@@ -232,14 +242,40 @@ class ConsultasController extends Controller
         /** @var EntityManager $em */
         $em=$this->getDoctrine()->getManager();
 
+        //Una opcion
         /*$grupos = $em->createQueryBuilder()
-            ->select('a', 'count(a)')
-            ->from('AppBundle:Grupo', 'a')
-            ->groupBy('a.id')
+            ->select('g')
+            ->from('AppBundle:Grupo', 'g')
+            ->orderBy('g.descripcion', 'DESC')
+            ->groupBy('g.id')
             ->getQuery()
             ->getResult();*/
 
-        $grupos = $em->createQuery('SELECT count(a) FROM AppBundle:Grupo a GROUP BY a.descripcion')->getResult();
+        //ejecucion sql
+        //select g.descripcion, a.grupo_id count(*) form alumno inner join grupo g on g.id=a.grupo_id grupo_id group by a.grupo_id order by g.descripcion desc
+        //$grupos = $em->createQuery('SELECT count(a) FROM AppBundle:Grupo a GROUP BY a.descripcion')->getResult();
+
+        //Otra opcion (parecida a sql) Con join
+        $grupos = $em->createQueryBuilder()
+            ->select('g')
+            ->addSelect('COUNT(a)')
+            ->from('AppBundle:Alumno', 'a')
+            ->innerJoin('AppBundle:Grupo', 'g', 'WITH', 'g.id = a.grupo')
+            ->groupBy('g')
+            ->orderBy('g.descripcion', 'DESC')
+            ->getQuery()
+            ->getResult();
+
+        //Otra opción
+        $grupos = $em->createQueryBuilder()
+            ->select('g')
+            ->addSelect('COUNT(a)')
+            ->from('AppBundle:Alumno', 'a')
+            ->innerJoin('AppBundle:Grupo', 'g', 'WITH', 'g.id = a.grupo')
+            ->groupBy('g')
+            ->orderBy('g.descripcion', 'DESC')
+            ->getQuery()
+            ->getResult();
 
         return $this->render('consultas/consulta10.html.twig', [
             'grupos' => $grupos
