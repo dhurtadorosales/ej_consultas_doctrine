@@ -255,7 +255,7 @@ class ConsultasController extends Controller
         //select g.descripcion, a.grupo_id count(*) form alumno inner join grupo g on g.id=a.grupo_id grupo_id group by a.grupo_id order by g.descripcion desc
         //$grupos = $em->createQuery('SELECT count(a) FROM AppBundle:Grupo a GROUP BY a.descripcion')->getResult();
 
-        //Otra opcion (parecida a sql) Con join
+    /*    //Otra opcion (parecida a sql) Con join
         $grupos = $em->createQueryBuilder()
             ->select('g')
             ->addSelect('COUNT(a)')
@@ -264,7 +264,31 @@ class ConsultasController extends Controller
             ->groupBy('g')
             ->orderBy('g.descripcion', 'DESC')
             ->getQuery()
+            ->getResult();      */
+
+     /*   //Otra opcion (mejor)
+        $grupos = $em->createQueryBuilder()
+            ->select('g')
+            ->addSelect('COUNT(a)')
+            ->from('AppBundle:Grupo', 'g')
+            ->join('g.alumnado', 'a')
+            ->groupBy('g')
+            ->orderBy('g.descripcion', 'DESC')
+            ->getQuery()
+            ->getResult();          */
+
+        //Otra opcion (óptima)
+        $grupos = $em->createQueryBuilder()
+            ->select('g')
+            ->addSelect('SIZE(g.alumnado)')
+            ->addSelect('t')
+            ->from('AppBundle:Grupo', 'g')
+            ->join('g.tutor', 't')
+            ->orderBy('g.descripcion', 'DESC')
+            ->getQuery()
             ->getResult();
+
+        dump($grupos);
 
         return $this->render('consultas/consulta10.html.twig', [
             'grupos' => $grupos
