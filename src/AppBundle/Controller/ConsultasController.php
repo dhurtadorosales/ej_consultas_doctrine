@@ -221,8 +221,8 @@ class ConsultasController extends Controller
         $em=$this->getDoctrine()->getManager();
 
         $grupos = $em->createQueryBuilder()
-            ->select('a')
-            ->from('AppBundle:Grupo', 'a')
+            ->select('g')
+            ->from('AppBundle:Grupo', 'g')
             ->orderBy('a.descripcion')
             ->getQuery()
             ->getResult();
@@ -305,9 +305,9 @@ class ConsultasController extends Controller
         $em=$this->getDoctrine()->getManager();
 
         $grupos = $em->createQueryBuilder()
-            ->select('a')
-            ->from('AppBundle:Grupo', 'a')
-            ->orderBy('a.descripcion')
+            ->select('g')
+            ->from('AppBundle:Grupo', 'g')
+            ->orderBy('g.descripcion')
             ->getQuery()
             ->getResult();
 
@@ -341,6 +341,50 @@ class ConsultasController extends Controller
     }
 
     /**
+     * @Route("/ej12", name="ejercicio12")
+     */
+    public function ej12Action()
+    {
+        //Entity manager
+        /** @var EntityManager $em */
+        $em=$this->getDoctrine()->getManager();
+
+        $profesores = $em->createQueryBuilder()
+            ->select('p')
+            ->from('AppBundle:Profesor', 'p')
+            ->getQuery()
+            ->getResult();
+
+        return $this->render('consultas/profesoresEnlaces.html.twig', [
+            'profesores' => $profesores
+        ]);
+    }
+
+    /**
+     * @Route("/ej12_2/{profesor}", name="ejercicio12_2")
+     */
+    public function ej12_2Action($profesor)
+    {
+        //Entity manager
+        /** @var EntityManager $em */
+        $em=$this->getDoctrine()->getManager();
+
+        $partes = $em->createQueryBuilder()
+            ->select('p')
+            ->from('AppBundle:Parte', 'p')
+            ->where('p.profesor = :profesor')
+            ->setParameter('profesor', $profesor)
+            ->orderBy('p.fechaCreacion')
+            ->getQuery()
+            ->getResult();
+
+        return $this->render('consultas/partes.html.twig', [
+            'partes' => $partes,
+            'profesor' => $profesor
+        ]);
+    }
+
+    /**
      * @Route("/ej13", name="ejercicio13")
      */
     public function ej13Action()
@@ -349,13 +393,21 @@ class ConsultasController extends Controller
         /** @var EntityManager $em */
         $em=$this->getDoctrine()->getManager();
 
+    /*    //Solución cutre sin ordenar
         $alumnado = $em->createQueryBuilder()
             ->select('a')
             ->addSelect('COUNT(p)')
             ->from('AppBundle:Alumno', 'a')
-            ->innerJoin('AppBundle:Parte', 'p', 'WITH', 'a.id = p.alumno')
+            ->join('AppBundle:Parte', 'p', 'WITH', 'a.id = p.alumno')
             ->groupBy('a')
-            ->orderBy('p')
+            ->getQuery()
+            ->getResult();              */
+
+        $alumnado = $em->createQueryBuilder()
+            ->select('a')
+            ->addSelect('SIZE(a.partes)')
+            ->from('AppBundle:Alumno', 'a')
+            ->orderBy('SIZE(a.partes)')
             ->getQuery()
             ->getResult();
 
@@ -363,4 +415,91 @@ class ConsultasController extends Controller
             'alumnado' => $alumnado
         ]);
     }
+
+    /**
+     * @Route("/ej14/{texto}", name="ejercicio14")
+     */
+    public function ej14Action($texto)
+    {
+        //Entity manager
+        /** @var EntityManager $em */
+        $em=$this->getDoctrine()->getManager();
+
+        $partes = $em->createQueryBuilder()
+            ->select('p')
+            ->from('AppBundle:Parte', 'p')
+            ->where('p.observaciones LIKE :texto')
+            ->setParameter('texto',  '%'. $texto .'%') //->setParameter('texto',  "% $texto %")
+            ->getQuery()
+            ->getResult();
+
+        return $this->render('consultas/partesObservaciones.html.twig', [
+            'partes' => $partes,
+            'texto' => $texto
+        ]);
+    }
+
+    /**
+     * @Route("/ej15", name="ejercicio15")
+     */
+    public function ej15Action()
+    {
+        //Entity manager
+        /** @var EntityManager $em */
+        $em=$this->getDoctrine()->getManager();
+
+        $partes = $em->createQueryBuilder()
+            ->select('p')
+            ->from('AppBundle:Parte', 'p')
+            ->where('p.alumno IS NULL')
+            ->getQuery()
+            ->getResult();
+
+        return $this->render('consultas/partes.html.twig', [
+            'partes' => $partes     //Hay que borrar el h1 de la plantilla
+        ]);
+    }
+
+    /**
+     * @Route("/ej16", name="ejercicio16")
+     */
+    public function ej16Action()
+    {
+        //Entity manager
+        /** @var EntityManager $em */
+        $em=$this->getDoctrine()->getManager();
+
+        $profesores = $em->createQueryBuilder()
+            ->select('p')
+            ->from('AppBundle:Profesor', 'p')
+            ->where('SIZE(p.partes) = 0')
+            ->getQuery()
+            ->getResult();
+
+        return $this->render('consultas/profesorado.html.twig', [
+            'profesores' => $profesores
+        ]);
+    }
+
+    /**
+     * @Route("/ej17", name="ejercicio17")
+     */
+    public function ej17Action()
+    {
+        //Entity manager
+        /** @var EntityManager $em */
+        $em=$this->getDoctrine()->getManager();
+
+        $alumnos = $em->createQueryBuilder()
+            ->select('a')
+            ->from('AppBundle:Alumno', 'a')
+            ->where('SIZE(a.partes) = 0')
+            ->getQuery()
+            ->getResult();
+
+        return $this->render('consultas/alumnado.html.twig', [
+            'alumnado' => $alumnos
+        ]);
+    }
+
 }

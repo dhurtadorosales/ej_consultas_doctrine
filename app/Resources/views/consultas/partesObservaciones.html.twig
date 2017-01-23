@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Partes que contienen "{{ texto }}"</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Cod parte</th>
+                <th>Observaciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {%  for parte in partes %}
+                <tr>
+                    <td>{{ parte.id }}</td>
+                    <td>{{ parte.observaciones }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+
+    </table>
+{% endblock %}
+

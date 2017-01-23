@@ -4,7 +4,9 @@
     <h1>Listado de grupos</h1>
     <ul>
         {%  for grupo in grupos %}
-            <li><a href="{{ path('')}}">{{ grupo.descripcion }}</a></li>
+            <li>
+                <a href="{{ path('ejercicio11_2', {'grupo': grupo.id}) }}">{{ grupo.descripcion }}</a>
+            </li>
         {% endfor %}
     </ul>
 {% endblock %}

@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Partes puestos por {{ partes[0].profesor.nombre }} {{ partes[0].profesor.apellidos }}</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Cod parte</th>
+                <th>Profesor</th>
+                <th>Alumno</th>
+                <th>Fecha</th>
+            </tr>
+        </thead>
+        <tbody>
+            {%  for parte in partes %}
+                <tr>
+                    <td>{{ parte.id }}</td>
+                    <td>{{ parte.profesor.apellidos }}, {{ parte.profesor.nombre }}</td>
+                    <td>{{ parte.alumno.apellidos }}, {{ parte.alumno.nombre }}</td>
+                    <td>{{ parte.fechaCreacion | date('d/m/Y') }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+
+    </table>
+{% endblock %}
+

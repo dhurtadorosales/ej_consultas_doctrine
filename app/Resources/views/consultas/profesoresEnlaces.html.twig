@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Listado de profesores</h1>
+    <ul>
+        {%  for profesor in profesores %}
+            <li>
+                <a href="{{ path('ejercicio12_2', {'profesor':profesor.id }) }}">{{ profesor.apellidos }}, {{ profesor.nombre }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}
+
