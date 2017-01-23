@@ -266,17 +266,6 @@ class ConsultasController extends Controller
             ->getQuery()
             ->getResult();
 
-        //Otra opción
-        $grupos = $em->createQueryBuilder()
-            ->select('g')
-            ->addSelect('COUNT(a)')
-            ->from('AppBundle:Alumno', 'a')
-            ->innerJoin('AppBundle:Grupo', 'g', 'WITH', 'g.id = a.grupo')
-            ->groupBy('g')
-            ->orderBy('g.descripcion', 'DESC')
-            ->getQuery()
-            ->getResult();
-
         return $this->render('consultas/consulta10.html.twig', [
             'grupos' => $grupos
         ]);
@@ -338,7 +327,11 @@ class ConsultasController extends Controller
 
         $alumnado = $em->createQueryBuilder()
             ->select('a')
+            ->addSelect('COUNT(p)')
             ->from('AppBundle:Alumno', 'a')
+            ->innerJoin('AppBundle:Parte', 'p', 'WITH', 'a.id = p.alumno')
+            ->groupBy('a')
+            ->orderBy('p')
             ->getQuery()
             ->getResult();
 

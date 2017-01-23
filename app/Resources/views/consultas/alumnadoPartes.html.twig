@@ -13,8 +13,8 @@
         <tbody>
             {%  for alumno in alumnado %}
                 <tr>
-                    <td>{{ alumno.apellidos }}, {{ alumno.nombre }}</td>
-                    <td>{{ alumno.partes.descripcion }}</td>
+                    <td>{{ alumno[0].apellidos }}, {{ alumno[0].nombre }}</td>
+                    <td>{{ alumno[1] }}</td>
                 </tr>
             {% endfor %}
         </tbody>
