@@ -49,6 +49,18 @@ class Profesor
      * @ORM\ManyToMany(targetEntity="Grupo", inversedBy="profesorado")
      */
     private $grupos;
+
+    public function __toString()
+    {
+        return $this->getNombre() . ' ' .$this->getApellidos();
+    }
+
+    public function getApellidosNombre()
+    {
+        return $this->getapellidos() . ', ' .$this->getNombre();
+    }
+
+
     /**
      * Constructor
      */

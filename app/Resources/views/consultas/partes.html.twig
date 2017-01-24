@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Partes puestos por {{ partes[0].profesor.nombre }} {{ partes[0].profesor.apellidos }}</h1>
+    <h1>Partes puestos por {{ profesor }}</h1>
 
     <table>
         <thead>
@@ -16,7 +16,7 @@
             {%  for parte in partes %}
                 <tr>
                     <td>{{ parte.id }}</td>
-                    <td>{{ parte.profesor.apellidos }}, {{ parte.profesor.nombre }}</td>
+                    <td>{{ profesor.apellidosNombre }}</td>
                     <td>{{ parte.alumno.apellidos }}, {{ parte.alumno.nombre }}</td>
                     <td>{{ parte.fechaCreacion | date('d/m/Y') }}</td>
                 </tr>

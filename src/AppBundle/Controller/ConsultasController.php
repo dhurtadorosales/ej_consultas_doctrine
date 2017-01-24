@@ -2,6 +2,9 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\Alumno;
+use AppBundle\Entity\Grupo;
+use AppBundle\Entity\Profesor;
 use Doctrine\ORM\EntityManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -319,7 +322,7 @@ class ConsultasController extends Controller
     /**
      * @Route("/ej11_2/{grupo}", name="ejercicio11_2")
      */
-    public function ej11_2Action($grupo)
+    public function ej11_2Action(Grupo $grupo) //Decimos que $grupo es un objeto de la clase Grupo
     {
         //Entity manager
         /** @var EntityManager $em */
@@ -363,7 +366,7 @@ class ConsultasController extends Controller
     /**
      * @Route("/ej12_2/{profesor}", name="ejercicio12_2")
      */
-    public function ej12_2Action($profesor)
+    public function ej12_2Action(Profesor $profesor)
     {
         //Entity manager
         /** @var EntityManager $em */
@@ -371,10 +374,12 @@ class ConsultasController extends Controller
 
         $partes = $em->createQueryBuilder()
             ->select('p')
+            ->addSelect('a')
             ->from('AppBundle:Parte', 'p')
             ->where('p.profesor = :profesor')
             ->setParameter('profesor', $profesor)
             ->orderBy('p.fechaCreacion')
+            ->join('p.alumno', 'a')
             ->getQuery()
             ->getResult();
 
@@ -492,8 +497,10 @@ class ConsultasController extends Controller
 
         $alumnos = $em->createQueryBuilder()
             ->select('a')
+            ->addSelect('g')
             ->from('AppBundle:Alumno', 'a')
             ->where('SIZE(a.partes) = 0')
+            ->join('a.grupo', 'g')
             ->getQuery()
             ->getResult();
 
