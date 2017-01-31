@@ -476,7 +476,9 @@ class ConsultasController extends Controller
 
         $profesores = $em->createQueryBuilder()
             ->select('p')
+            ->addSelect('g')
             ->from('AppBundle:Profesor', 'p')
+            ->leftJoin('p.tutoria', 'g')    //Obligamos a que salgan todos los profesores de la tabla de la izquierda (aunque no tengan tutoría)
             ->where('SIZE(p.partes) = 0')
             ->getQuery()
             ->getResult();
@@ -508,5 +510,6 @@ class ConsultasController extends Controller
             'alumnado' => $alumnos
         ]);
     }
+
 
 }
