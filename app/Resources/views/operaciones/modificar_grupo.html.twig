@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Modificar grupo</h1>
+    <ul>
+        <li>{{ grupo.id }}</li>
+        <li>{{ grupo.descripcion }}</li>
+        <li>{{ grupo.aula }}</li>
+        <li>{{ grupo.planta }}</li>
+        <li>{{ grupo.tutor }}</li>
+    </ul>
+    {{ form_start(form) }}
+        {{ form_row(form.tutor) }}
+        {{ form_widget(form) }}
+    {{ form_end(form) }}
+{% endblock %}
+

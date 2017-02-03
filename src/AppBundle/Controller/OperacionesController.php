@@ -9,6 +9,7 @@ use AppBundle\Entity\Profesor;
 use Doctrine\ORM\EntityManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 
 class OperacionesController extends Controller
@@ -69,5 +70,35 @@ class OperacionesController extends Controller
 
     //Para el update usamos el set y le asignamos un flush
     //$grupo->setDescription('hola');
+
+    /**
+     * @Route("/grupo/{descripcion}", name="form_grupo")
+     */
+    public function formularioGrupoAction(Request $request, Grupo $grupo)
+    {
+        //Entity manager
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+
+        $form= $this->createFormBuilder($grupo)
+            ->add('descripcion')
+            ->add('aula')
+            ->add('planta')
+            ->add('tutor')
+            ->add('guardar', SubmitType::class)
+            ->getForm();
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()){
+            $em->flush();
+        }
+
+        return $this->render('operaciones/modificar_grupo.html.twig', [
+            'grupo' => $grupo,
+            'form' => $form->createView()
+        ]);
+    }
+
 }
 
