@@ -81,10 +81,15 @@ class OperacionesController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $form= $this->createFormBuilder($grupo)
-            ->add('descripcion')
+            ->add('descripcion', null, [
+                'label' => 'Nombre completo',
+                'disabled' => true
+            ])
             ->add('aula')
             ->add('planta')
-            ->add('tutor')
+            ->add('tutor', null, [
+                'expanded' => false
+            ])
             ->add('guardar', SubmitType::class)
             ->getForm();
 
